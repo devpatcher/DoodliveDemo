@@ -15,11 +15,23 @@
           Sign In
         </div>
         <div class="row">
-          <input class="login-form-input" placeholder="E-mail or Username" type="email">
-          <input class="login-form-input" placeholder="Password" type="password">
+          <input
+            class="login-form-input"
+            placeholder="E-mail or Username"
+            type="email"
+            id="email"
+            v-model="email"
+          >
+          <input
+            class="login-form-input"
+            placeholder="Password"
+            type="password"
+            id="password"
+            v-model="password"
+          >
         </div>
         <div class="row">
-          <button class="btn btn-primary login-form-submit" data-bs-target="#collapseTarget" data-bs-toggle="collapse">
+          <button class="btn btn-primary login-form-submit" @click="handleLogin">
             Continue
           </button>
         </div>
@@ -28,5 +40,31 @@
   </div>
 </template>
 
-<style>
-</style>
+<script lang="ts">
+  import firebase from "firebase";
+  import router from '../router';
+  export default {
+    data() {
+      return {
+        email: import.meta.env.VITE_APP_DEFAULT_EMAIL,
+        password: import.meta.env.VITE_APP_DEFAULT_PASSWORD,
+      }
+    },
+    methods: {
+      handleLogin(event: any) {
+        const email = this.email;
+        const password = this.password;
+
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password) // THIS LINE CHANGED
+          .then((data) => {
+            router.push('/');
+          })
+          .catch(error => {
+            console.log('login error', error);
+          });
+      }
+    }
+  }
+</script>
