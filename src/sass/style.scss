@@ -1,0 +1,162 @@
+@import 'variables';
+@import 'fonts';
+
+body {
+    max-width: 1080px;
+    height: 100vh;
+    padding: 0;
+    margin: auto;
+}
+
+#app {
+    max-width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    font-weight: normal;
+    background-color: $mirage;
+}
+  
+header {
+    line-height: 1.5;
+    max-height: 100vh;
+}
+
+.logo {
+    width: 72px;
+    height: 35px;
+    object-fit: contain;
+    opacity: 0.3;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    border: 2px solid $zircon;
+    border-radius: 50%;
+    margin: 0;
+    padding: 0;
+    opacity: 0.3;
+}
+
+.login-form {
+    text-align: center;
+    margin-top: 25vh;
+    &-title {
+        font-family: Poppins-Bold;
+        font-style: normal;
+        font-size: 45px;
+        letter-spacing: 0.3px;
+        line-height: 85px;
+        text-align: center;
+        color: $zircon;
+        margin-bottom: 0.5em;
+    }
+    &-input {
+        font-family: Poppins-Medium;
+        font-style: normal;
+        font-size: 16px;
+        letter-spacing: 0.4px;
+        line-height: 24px;
+        text-align: left;
+        color: $zircon;
+        outline: 0;
+        border-width: 0 0 2px;
+        border-color: $zircon_op;
+        background: $mirage;
+        margin-bottom: 2em;
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    &-submit {
+        font-family: Poppins-Medium;
+        font-style: normal;
+        font-size: 18px;
+        letter-spacing: 0.6px;
+        line-height: 1.8em;
+        color: $zircon;
+        background-color: $malachite;
+        border-color: $malachite;
+        border-radius: 10px;
+        &:hover {
+            color: $zircon;
+            background-color: $malachite_op;
+            border-color: $malachite_op;
+        }
+        &:focus {
+            color: $zircon;
+            background-color: $malachite_op;
+            border-color: $malachite_op;
+            box-shadow: 0 0 0 0.25rem $malachite_op;
+        }
+    }
+}
+
+.float-right {
+    float: right;
+}
+
+a,
+.green {
+    text-decoration: none;
+    color: hsla(160, 100%, 37%, 1);
+    transition: 0.4s;
+}
+
+@media (hover: hover) {
+    a:hover {
+        background-color: hsla(160, 100%, 37%, 0.2);
+    }
+}
+
+nav {
+    width: 100%;
+    font-size: 12px;
+    margin-top: 2rem;
+}
+
+nav a.router-link-exact-active {
+    color: var(--color-text);
+}
+
+nav a.router-link-exact-active:hover {
+    background-color: transparent;
+}
+
+nav a {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
+}
+
+nav a:first-of-type {
+    border: 0;
+}
+
+@media (min-width: 1024px) {
+    header {
+        display: flex;
+        place-items: center;
+        padding-right: calc(var(--section-gap) / 2);
+    }
+
+    header .wrapper {
+        display: flex;
+        place-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        margin: 0 2rem 0 0;
+    }
+
+    nav {
+        text-align: left;
+        font-size: 1rem;
+        padding: 1rem 0;
+        margin-top: 1rem;
+    }
+}
