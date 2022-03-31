@@ -3,6 +3,9 @@ import { createStore } from 'vuex';
 import App from './App.vue';
 import router from './router';
 import firebase from "firebase";
+// @ts-ignore
+import vue3videoPlay from 'vue3-video-play';
+import 'vue3-video-play/dist/style.css';
 
 const store = createStore({
 	state () {
@@ -46,6 +49,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 const app = createApp(App);
+
+app.use(vue3videoPlay, {
+	lang: 'en-US'
+});
 
 app.use(router);
 
