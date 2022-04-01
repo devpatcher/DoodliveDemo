@@ -1,14 +1,22 @@
 <template>
   <title>Login</title>
-  <nav>
-    <a href="/">
-      <img alt="Logo" src="../assets/logo.png" class="logo">
-    </a>
-    <a href="#" class="float-right">
+  <div class="logoutModal" v-if="isLogout" v-on:click.stop>
+    <a href="#" class="float-right" :style="{'left': `${logoutIconX}px`, top: `${logoutIconY}px`, position: 'absolute'}">
       <img alt="Logo" src="../assets/avatar.png" class="avatar">
     </a>
+    <button class="btn btn-primary logout-button" @click="handleLogout" :style="{'left': `${logoutIconX - 150}px`, top: `${logoutIconY}px`, position: 'absolute'}">
+      Logout
+    </button>
+  </div>
+  <nav>
+    <a href="/">
+      <img alt="Logo" src="../assets/logo.png" :class="getLogoClass">
+    </a>
+    <a href="#" class="float-right" @click="showLogoutModal" v-if="!isLogout">
+      <img alt="Logo" src="../assets/avatar.png" class="avatar" ref="logoutIcon">
+    </a>
   </nav>
-  <div class="container">
+  <div :class="getContainerClass">
     <div class="row justify-content-center home">
       <div class="col-12 col-lg-9 home-left">
         <div class="video-view" ref="videoBox">
@@ -55,9 +63,7 @@
 </template>
 
 <script lang="ts">
-  import { ref } from 'vue';
   import firebase from "firebase";
-  import router from '../router';
   import { reactive } from 'vue';
   import CommentItem from './CommentItem.vue';
   export default {
@@ -74,6 +80,7 @@
                 src: "https://stream.mux.com/AHtNUiG600zlYSjecA5Nnp6OPitww802KLUnX023WnL118.m3u8",
                 type: "m3u8",
             }),
+            isLogout: false,
             message: "",
             comments: [
                 {
@@ -98,56 +105,84 @@
                 },
             ],
             chatHeight: 0,
+            logoutIconX: 0,
+            logoutIconY: 0,
         };
     },
     mounted() {
         this.resizeChatBox();
     },
     created() {
-        window.addEventListener("resize", this.resizeChatBox);
+        window.addEventListener("resize", this.onResize);
     },
     destroyed() {
-        window.removeEventListener("resize", this.resizeChatBox);
+        window.removeEventListener("resize", this.onResize);
     },
     updated() {
         this.scrollChatToBottom();
     },
     computed: {
         chatBoxHeight(): any {
-            return this.chatHeight;
+          return this.chatHeight;
+        },
+        getLogoClass(): String {
+          return this.isLogout ? 'logo blur' : 'logo';
+        },
+        getContainerClass(): String {
+          return this.isLogout ? 'container blur' : 'container';
+        },
+        logoutIconX(): number {
+          return this.logoutIconX;
+        },
+        logoutIconY(): number {
+          return this.logoutIconY;
         },
     },
     methods: {
-        handleSend(e: any) {
-            this.comments.push({ id: this.comments.length + 1, user: 'Dummy', comment: this.message });
-            setTimeout(() => {
-                this.scrollChatToBottom();
-            }, 300);
-        },
-        onPlay() {
-            this.resizeChatBox();
-        },
-        onCanplay() {
-            this.resizeChatBox();
-        },
-        onScroll() {
-            console.log("onScroll");
-        },
-        resizeChatBox(e: any) {
-          if (!this.$refs.videoBox || !this.$refs.chatTop || !this.$refs.chatBottom) {
-            return;
-          }
-          let videoBoxHeight = this.$refs.videoBox.clientHeight;
-          let chatTopHeight = this.$refs.chatTop.clientHeight;
-          let chatBottomHeight = this.$refs.chatBottom.clientHeight;
-          const chatHeight = videoBoxHeight - chatTopHeight - chatBottomHeight - 60;
-          this.chatHeight = chatHeight;
-        },
-        scrollChatToBottom() {
-            const chatBox = this.$refs.chatbox;
-            //chatBox.scrollTop = chatBox.scrollHeight; //use this code in case of not using perfect-scrollbar
-            chatBox.$el.scrollTop = chatBox.$el.scrollHeight;
-        },
+      showLogoutModal(e: any) {
+        this.isLogout = true;
+        if (this.$refs.logoutIcon) {
+          const rect = this.$refs.logoutIcon.getBoundingClientRect();
+          this.logoutIconX = rect.x - rect.width + 3;
+          this.logoutIconY = rect.y - rect.height + 3;
+        }
+      },
+      handleLogout(e: any) {
+        firebase.auth().signOut();
+      },
+      handleSend(e: any) {
+          this.comments.push({ id: this.comments.length + 1, user: 'Dummy', comment: this.message });
+          setTimeout(() => {
+              this.scrollChatToBottom();
+          }, 300);
+      },
+      onPlay() {
+          this.resizeChatBox();
+      },
+      onCanplay() {
+          this.resizeChatBox();
+      },
+      onScroll() {
+          console.log("onScroll");
+      },
+      onResize() {
+        this.resizeChatBox();
+      },
+      resizeChatBox(e: any) {
+        if (!this.$refs.videoBox || !this.$refs.chatTop || !this.$refs.chatBottom) {
+          return;
+        }
+        let videoBoxHeight = this.$refs.videoBox.clientHeight;
+        let chatTopHeight = this.$refs.chatTop.clientHeight;
+        let chatBottomHeight = this.$refs.chatBottom.clientHeight;
+        const chatHeight = videoBoxHeight - chatTopHeight - chatBottomHeight - 60;
+        this.chatHeight = chatHeight;
+      },
+      scrollChatToBottom() {
+          const chatBox = this.$refs.chatbox;
+          //chatBox.scrollTop = chatBox.scrollHeight; //use this code in case of not using perfect-scrollbar
+          chatBox.$el.scrollTop = chatBox.$el.scrollHeight;
+      },
     },
 }
 </script>
