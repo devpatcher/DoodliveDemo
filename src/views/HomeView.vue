@@ -2,7 +2,7 @@
   <title>Login</title>
   <div class="logoutModal" v-if="isLogout" v-on:click.stop>
     <a href="#" class="float-right" :style="{'left': `${logoutIconX}px`, top: `${logoutIconY}px`, position: 'absolute'}">
-      <img alt="Logo" src="../assets/avatar.png" class="avatar">
+      <img alt="Logo" :src="getAvatarUrl" class="avatar">
     </a>
     <button class="btn btn-primary logout-button" @click="handleLogout" :style="{'left': `${logoutIconX - 150}px`, top: `${logoutIconY}px`, position: 'absolute'}">
       Logout
@@ -13,7 +13,7 @@
       <img alt="Logo" src="../assets/logo.png" :class="getLogoClass">
     </a>
     <a href="#" class="float-right" @click="showLogoutModal" v-if="!isLogout">
-      <img alt="Logo" src="../assets/avatar.png" class="avatar" ref="logoutIcon">
+      <img alt="Logo" :src="getAvatarUrl" class="avatar" ref="logoutIcon">
     </a>
   </nav>
   <div :class="getContainerClass">
@@ -64,8 +64,11 @@
 
 <script lang="ts">
   import firebase from "firebase";
+  import { mapActions, mapGetters } from "vuex";
   import { reactive } from 'vue';
   import CommentItem from './CommentItem.vue';
+  const db = firebase.database();
+  const fetchChat = db.ref("messages/");
   export default {
     components: { 
       CommentItem
@@ -83,26 +86,6 @@
             isLogout: false,
             message: "",
             comments: [
-                {
-                    id: 1,
-                    user: 'Konstantin_Alonov',
-                    comment: "Hey mate! How’s going? I think it’s great idea to collaborate with you.",
-                },
-                {
-                    id: 2,
-                    user: 'Xayoo_',
-                    comment: "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound  the actual teachings.",
-                },
-                {
-                    id: 3,
-                    user: 'LCS',
-                    comment: "Yeah man, you will have the verified on the new platform. This is the old one",
-                },
-                {
-                    id: 4,
-                    user: 'Konstantin_Alonov',
-                    comment: "Hey mate! How’s going? I think it’s great idea to collaborate with you.",
-                },
             ],
             chatHeight: 0,
             logoutIconX: 0,
@@ -111,6 +94,7 @@
     },
     mounted() {
         this.resizeChatBox();
+        fetchChat.on("child_added", this.addChat);
     },
     created() {
         window.addEventListener("resize", this.onResize);
@@ -122,6 +106,7 @@
         this.scrollChatToBottom();
     },
     computed: {
+      ...mapGetters(['getUser', 'getAvatar']),
         chatBoxHeight(): any {
           return this.chatHeight;
         },
@@ -137,8 +122,15 @@
         logoutIconY(): number {
           return this.logoutIconY;
         },
+        getAvatarUrl(): String {
+          const url = this.$store.getters.getAvatar;
+
+          return url ? url : 'src/assets/avatar.png';
+        },
     },
     methods: {
+      ...mapActions(["signOutAction"]),
+      ...mapGetters(['getUser', 'getAvatar']),
       showLogoutModal(e: any) {
         this.isLogout = true;
         if (this.$refs.logoutIcon) {
@@ -148,22 +140,28 @@
         }
       },
       handleLogout(e: any) {
-        firebase.auth().signOut();
+        this.signOutAction();
       },
       handleSend(e: any) {
-          this.comments.push({ id: this.comments.length + 1, user: 'Dummy', comment: this.message });
-          setTimeout(() => {
-              this.scrollChatToBottom();
-          }, 300);
+        const timestamp = Date.now();
+        const url = this.$store.getters.getAvatar;
+        const name = this.$store.getters.getUser;
+        const message = this.message;
+
+        db.ref("messages/" + timestamp).set({
+          user: name,
+          avatar: url,
+          msg: message,
+        });
       },
       onPlay() {
-          this.resizeChatBox();
+        this.resizeChatBox();
       },
       onCanplay() {
-          this.resizeChatBox();
+        this.resizeChatBox();
       },
       onScroll() {
-          console.log("onScroll");
+        console.log("onScroll");
       },
       onResize() {
         this.resizeChatBox();
@@ -181,7 +179,22 @@
       scrollChatToBottom() {
           const chatBox = this.$refs.chatbox;
           //chatBox.scrollTop = chatBox.scrollHeight; //use this code in case of not using perfect-scrollbar
-          chatBox.$el.scrollTop = chatBox.$el.scrollHeight;
+          if (chatBox && chatBox.$el) {
+            chatBox.$el.scrollTop = chatBox.$el.scrollHeight;
+          }
+      },
+      addChat(snapshot: firebase.database.DataSnapshot) {
+        const snap = snapshot.val();
+
+        this.comments.push({
+          id: this.comments.length + 1,
+          user: snap.user,
+          avatar: snap.avatar,
+          comment: snap.msg,
+        });
+        setTimeout(() => {
+          this.scrollChatToBottom();
+        }, 300);
       },
     },
 }

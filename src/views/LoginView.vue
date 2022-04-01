@@ -41,8 +41,7 @@
 </template>
 
 <script lang="ts">
-  import firebase from "firebase";
-  import router from '../router';
+  import { mapActions } from "vuex";
   export default {
     data() {
       return {
@@ -51,19 +50,12 @@
       }
     },
     methods: {
+      ...mapActions(["signInAction"]),
       handleLogin(event: any) {
         const email = this.email;
         const password = this.password;
 
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password) // THIS LINE CHANGED
-          .then((data) => {
-            router.push('/');
-          })
-          .catch(error => {
-            console.log('login error', error);
-          });
+        this.signInAction({ email, password });
       }
     }
   }
