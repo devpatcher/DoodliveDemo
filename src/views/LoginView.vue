@@ -18,16 +18,20 @@
           <input
             class="login-form-input"
             placeholder="E-mail or Username"
+            autocomplete="off"
             type="email"
             id="email"
             v-model="email"
+            v-on:keyup.enter="onEnter"
           >
           <input
             class="login-form-input"
             placeholder="Password"
+            autocomplete="off"
             type="password"
             id="password"
             v-model="password"
+            v-on:keyup.enter="onEnter"
           >
         </div>
         <div class="row">
@@ -51,6 +55,9 @@
     },
     methods: {
       ...mapActions(["signInAction"]),
+      onEnter() {
+        this.handleLogin();
+      },
       handleLogin(event: any) {
         const email = this.email;
         const password = this.password;

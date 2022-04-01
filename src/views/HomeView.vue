@@ -51,6 +51,7 @@
               type="text"
               id="message"
               v-model="message"
+              v-on:keyup.enter="onEnter"
             >
             <button class="col-3 btn btn-primary chat-view-bottom-send" @click="handleSend">
               Send
@@ -148,11 +149,18 @@
         const name = this.$store.getters.getUser;
         const message = this.message;
 
+        if (!name) {
+          return;
+        }
+        if (!message) {
+          return;
+        }
         db.ref("messages/" + timestamp).set({
           user: name,
           avatar: url,
           msg: message,
         });
+        this.message = '';
       },
       onPlay() {
         this.resizeChatBox();
@@ -165,6 +173,9 @@
       },
       onResize() {
         this.resizeChatBox();
+      },
+      onEnter() {
+        this.handleSend();
       },
       resizeChatBox(e: any) {
         if (!this.$refs.videoBox || !this.$refs.chatTop || !this.$refs.chatBottom) {
