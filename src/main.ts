@@ -3,6 +3,11 @@ import { createStore } from 'vuex';
 import App from './App.vue';
 import router from './router';
 import firebase from "firebase";
+// @ts-ignore
+import vue3videoPlay from 'vue3-video-play';
+import 'vue3-video-play/dist/style.css';
+import PerfectScrollbar from 'vue3-perfect-scrollbar';
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
 const store = createStore({
 	state () {
@@ -46,6 +51,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 const app = createApp(App);
+
+app.use(vue3videoPlay, {
+	lang: 'en-US'
+});
+
+app.use(PerfectScrollbar);
 
 app.use(router);
 

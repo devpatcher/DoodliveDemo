@@ -2,10 +2,10 @@
   <title>Login</title>
   <nav>
     <a href="/">
-      <img alt="Logo" src="../assets/logo.png" class="logo">
+      <img alt="Logo" src="../assets/logo.png" class="logo logo-inactive">
     </a>
     <a href="#" class="float-right">
-      <img alt="Logo" src="../assets/avatar.png" class="avatar">
+      <img alt="Logo" src="../assets/avatar.png" class="avatar avatar-inactive">
     </a>
   </nav>
   <div class="container">

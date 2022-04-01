@@ -2,14 +2,12 @@
 @import 'fonts';
 
 body {
-    max-width: 1080px;
     height: 100vh;
     padding: 0;
     margin: auto;
 }
 
 #app {
-    max-width: 1280px;
     height: 100%;
     margin: 0 auto;
     padding: 2rem;
@@ -26,7 +24,9 @@ header {
     width: 72px;
     height: 35px;
     object-fit: contain;
-    opacity: 0.3;
+    &-inactive {
+        opacity: 0.3;
+    }
 }
 
 .avatar {
@@ -37,7 +37,9 @@ header {
     border-radius: 50%;
     margin: 0;
     padding: 0;
-    opacity: 0.3;
+    &-inactive {
+        opacity: 0.3;
+    }
 }
 
 .login-form {
@@ -91,6 +93,155 @@ header {
             background-color: $malachite_op;
             border-color: $malachite_op;
             box-shadow: 0 0 0 0.25rem $malachite_op;
+        }
+    }
+}
+
+.home {
+    text-align: center;
+    margin-top: 5vh;
+    &-left {
+        padding-right: calc(var(--bs-gutter-x) * 0.3);
+        padding-left: calc(var(--bs-gutter-x) * 0.3);
+    }
+    &-right {
+        padding-right: calc(var(--bs-gutter-x) * 0.3);
+        padding-left: calc(var(--bs-gutter-x) * 0.3);
+    }
+}
+
+.video-view {
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.chat-view {
+    background-color: $malachite_op2;
+    border-radius: 10px;
+    height: 100%;
+    overflow: hidden;
+    padding: 15px;
+    &-top {
+        &-title {
+            font-family: Poppins-Medium;
+            font-style: normal;
+            font-size: 18px;
+            letter-spacing: 0.6px;
+            line-height: 25px;
+            text-align: center;
+            color: $zircon;
+            float: left;
+            margin-right: 0.5em;
+        }
+        &-badge {
+            font-family: Poppins-Medium;
+            font-style: normal;
+            font-size: 12px;
+            letter-spacing: 2px;
+            line-height: 18px;
+            text-align: center;
+            color: $zircon;
+            float: left;
+            background-color: $malachite;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+    }
+    &-content {
+        margin-top: 35px;
+        margin-bottom: 15px;
+        overflow-y: auto;
+    }
+    &-bottom {
+        margin: 0;
+        border: 1.5px solid $zircon;
+        border-radius: 8px;
+        &-input {
+            font-family: Poppins-Regular;
+            font-style: normal;
+            font-size: 12px;
+            letter-spacing: 0.4px;
+            line-height: 18px;
+            text-align: left;
+            color: $zircon;
+            outline: 0;
+            border: none;
+            background: none;
+            margin: 0;
+            padding-left: 1em;
+            border-radius: 8px;
+        }
+        &-send {
+            font-family: Poppins-SemiBold;
+            font-style: normal;
+            font-size: 14px;
+            letter-spacing: 0.4px;
+            line-height: 20px;
+            text-align: left;
+            color: $jacarta;
+            outline: 0;
+            border-width: 0;
+            border-color: $zircon;
+            background: $zircon;
+            margin: 0;
+            text-align: center;
+            &:hover {
+                color: $jacarta;
+                background-color: $zircon;
+                border-width: 0;
+                border-color: $zircon;
+                box-shadow: none;
+            }
+            &:focus {
+                color: $jacarta;
+                background-color: $zircon;
+                border-width: 0;
+                border-color: $zircon;
+                box-shadow: none;
+            }
+            &:active {
+                color: $jacarta;
+                background-color: $zircon_op2;
+                border-width: 0;
+                border-color: $zircon;
+                box-shadow: none;
+            }
+        }
+    }
+}
+
+.comment {
+    display: flex;
+    padding-right: 10px;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    background: none;
+    &-avatar {
+        width: 21px;
+        height: 20px;
+        object-fit: contain;
+        background-color: green;
+        border-radius: 10px;
+    }
+    &-msg {
+        font-family: Poppins-Regular;
+        font-style: normal;
+        font-size: 12px;
+        letter-spacing: 0.4px;
+        line-height: 20px;
+        color: $zircon;
+        text-align: left;
+        padding-left: 0.5em;
+        padding-top: 0.2em;
+        mark {
+            font-family: Poppins-Medium;
+            font-style: normal;
+            font-size: 12px;
+            letter-spacing: 0.6px;
+            line-height: 20px;
+            color: $malachite;
+            background: none;
         }
     }
 }
