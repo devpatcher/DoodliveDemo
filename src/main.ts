@@ -46,6 +46,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		router.push('/');
     } else {
 		store.commit('logout');
+		router.push('/login');
 	}
 });
 

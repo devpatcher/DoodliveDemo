@@ -80,19 +80,29 @@ header {
         letter-spacing: 0.6px;
         line-height: 1.8em;
         color: $zircon;
+        height: 2.8em;
         background-color: $malachite;
         border-color: $malachite;
+        border-width: 0;
         border-radius: 10px;
         &:hover {
             color: $zircon;
             background-color: $malachite_op;
-            border-color: $malachite_op;
+            border-width: 0;
+            box-shadow: none;
         }
         &:focus {
             color: $zircon;
             background-color: $malachite_op;
-            border-color: $malachite_op;
-            box-shadow: 0 0 0 0.25rem $malachite_op;
+            border-width: 0;
+            box-shadow: none;
+        }
+        &:active {
+            color: $zircon;
+            background-color: $malachite_op2;
+            border-width: 0;
+            border-color: $zircon;
+            box-shadow: none;
         }
     }
 }
@@ -246,8 +256,55 @@ header {
     }
 }
 
+.logoutModal {
+    width: auto;
+    height: auto;
+    position: absolute;
+    z-index: 9999;
+}
+
+.logout-button {
+    font-family: Poppins-SemiBold;
+    font-style: normal;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+    line-height: 20px;
+    color: $zircon;
+    background-color: $malachite;
+    border-color: $malachite;
+    border-radius: 10px;
+    border-width: 0;
+    width: 9em;
+    height: 2.5em;
+    &:hover {
+        color: $zircon;
+        background-color: $malachite;
+        border-color: $malachite;
+        border-width: 0;
+        box-shadow: none;
+    }
+    &:focus {
+        color: $zircon;
+        background-color: $malachite;
+        border-width: 0;
+        border-color: $zircon;
+        box-shadow: none;
+    }
+    &:active {
+        color: $zircon;
+        background-color: $malachite_op2;
+        border-width: 0;
+        border-color: $zircon;
+        box-shadow: none;
+    }
+}
+
 .float-right {
     float: right;
+}
+
+.blur {
+    filter: blur(5px);
 }
 
 a,
