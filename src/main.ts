@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
-import { createStore } from 'vuex';
 import App from './App.vue';
 import router from './router';
+import store from './store';
 import firebase from "firebase";
 // @ts-ignore
 import vue3videoPlay from 'vue3-video-play';
@@ -9,21 +9,6 @@ import 'vue3-video-play/dist/style.css';
 import PerfectScrollbar from 'vue3-perfect-scrollbar';
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
-const store = createStore({
-	state () {
-		return {
-		is_logged_in: false,
-		}
-	},
-	mutations: {
-		login(state: any) {
-			state.is_logged_in = true;
-		},
-		logout(state: any) {
-			state.is_logged_in = false;
-		}
-	}
-});
 
 const env = import.meta.env;
 
@@ -40,17 +25,6 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-		store.commit('login');
-		router.push('/');
-    } else {
-		store.commit('logout');
-		router.push('/login');
-	}
-});
-
-
 const app = createApp(App);
 
 app.use(vue3videoPlay, {
@@ -62,5 +36,7 @@ app.use(PerfectScrollbar);
 app.use(router);
 
 app.use(store);
+
+store.dispatch('authAction');
 
 app.mount('#app');
