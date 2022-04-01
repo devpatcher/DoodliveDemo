@@ -150,7 +150,8 @@ header {
     }
     &-content {
         margin-top: 35px;
-        border: 2px solid green;
+        margin-bottom: 15px;
+        overflow-y: auto;
     }
     &-bottom {
         margin: 0;
@@ -210,8 +211,39 @@ header {
     }
 }
 
-.result {
-    color: $malachite;
+.comment {
+    display: flex;
+    padding-right: 10px;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    background: none;
+    &-avatar {
+        width: 21px;
+        height: 20px;
+        object-fit: contain;
+        background-color: green;
+        border-radius: 10px;
+    }
+    &-msg {
+        font-family: Poppins-Regular;
+        font-style: normal;
+        font-size: 12px;
+        letter-spacing: 0.4px;
+        line-height: 20px;
+        color: $zircon;
+        text-align: left;
+        padding-left: 0.5em;
+        padding-top: 0.2em;
+        mark {
+            font-family: Poppins-Medium;
+            font-style: normal;
+            font-size: 12px;
+            letter-spacing: 0.6px;
+            line-height: 20px;
+            color: $malachite;
+            background: none;
+        }
+    }
 }
 
 .float-right {

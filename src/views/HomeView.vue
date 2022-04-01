@@ -25,20 +25,24 @@
               LIVE
             </div>
           </div>
-          <div class="chat-view-content"
-            :style="{'height': `${chatBoxHeight}px`}">
-            <div class="result" v-for="comment in comments" :key="comment.id">
-              <div>{{ comment.email }}</div>
-              <div>{{ comment.id }}</div>
+          <perfect-scrollbar
+            class="chat-view-content"
+            ref="chatbox"
+            @ps-scroll-y="onScroll"
+            :style="{'max-height': `${chatBoxHeight}px`}"
+          >
+            <div v-for="comment in comments" :key="comment.id">
+              <CommentItem :id="comment.id" :avatar="comment.avatar" :user="comment.user" :msg="comment.comment"></CommentItem>
             </div>
-            <InfiniteLoading :comments="comments" @infinite="load" />
-          </div>
+          </perfect-scrollbar>
           <div class="row chat-view-bottom" ref="chatBottom">
             <input
               class="col-9 chat-view-bottom-input"
               placeholder="Message"
               autocomplete="off"
               type="text"
+              id="message"
+              v-model="message"
             >
             <button class="col-3 btn btn-primary chat-view-bottom-send" @click="handleSend">
               Send
@@ -55,99 +59,92 @@
   import firebase from "firebase";
   import router from '../router';
   import { reactive } from 'vue';
-  // @ts-ignore
-  import InfiniteLoading from "v3-infinite-loading";
-  import "v3-infinite-loading/lib/style.css"; //required if you're not going to override default slots
+  import CommentItem from './CommentItem.vue';
   export default {
+    components: { 
+      CommentItem
+    },
     data() {
-      return {
-        options: reactive({
-          width: '100%',
-          height: '100%',
-          autoPlay: true,
-          loop: true,
-          src: "https://stream.mux.com/AHtNUiG600zlYSjecA5Nnp6OPitww802KLUnX023WnL118.m3u8",
-          type: 'm3u8',
-        }),
-        comments: [
-          {
-            id: 1,
-            email: 'test',
-          },
-          {
-            id: 2,
-            email: 'team',
-          },
-          {
-            id: 3,
-            email: 'team',
-          },
-          {
-            id: 4,
-            email: 'team',
-          },
-          {
-            id: 5,
-            email: 'team',
-          },
-          {
-            id: 6,
-            email: 'team',
-          },
-          {
-            id: 7,
-            email: 'team',
-          },
-          {
-            id: 8,
-            email: 'team',
-          },
-          {
-            id: 9,
-            email: 'team',
-          },
-          {
-            id: 10,
-            email: 'team',
-          },
-        ],
-        chatHeight: 0,
-      }
+        return {
+            options: reactive({
+                width: "100%",
+                height: "100%",
+                autoPlay: true,
+                loop: true,
+                src: "https://stream.mux.com/AHtNUiG600zlYSjecA5Nnp6OPitww802KLUnX023WnL118.m3u8",
+                type: "m3u8",
+            }),
+            message: "",
+            comments: [
+                {
+                    id: 1,
+                    user: 'Konstantin_Alonov',
+                    comment: "Hey mate! How’s going? I think it’s great idea to collaborate with you.",
+                },
+                {
+                    id: 2,
+                    user: 'Xayoo_',
+                    comment: "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound  the actual teachings.",
+                },
+                {
+                    id: 3,
+                    user: 'LCS',
+                    comment: "Yeah man, you will have the verified on the new platform. This is the old one",
+                },
+                {
+                    id: 4,
+                    user: 'Konstantin_Alonov',
+                    comment: "Hey mate! How’s going? I think it’s great idea to collaborate with you.",
+                },
+            ],
+            chatHeight: 0,
+        };
     },
     mounted() {
-      this.resizeChatBox();
+        this.resizeChatBox();
     },
     created() {
-      window.addEventListener("resize", this.resizeChatBox);
+        window.addEventListener("resize", this.resizeChatBox);
     },
     destroyed() {
-      window.removeEventListener("resize", this.resizeChatBox);
+        window.removeEventListener("resize", this.resizeChatBox);
+    },
+    updated() {
+        this.scrollChatToBottom();
     },
     computed: {
-      chatBoxHeight(): any {
-        return this.chatHeight;
-      },
+        chatBoxHeight(): any {
+            return this.chatHeight;
+        },
     },
     methods: {
-      handleSend(e: any) {
-        console.log('handleSend');
-      },
-      load() {
-        console.log('load');
-      },
-      onPlay() {
-        this.resizeChatBox();
-      },
-      onCanplay() {
-        this.resizeChatBox();
-      },
-      resizeChatBox(e: any) {
-        let videoBoxHeight = this.$refs.videoBox.clientHeight;
-        let chatTopHeight = this.$refs.chatTop.clientHeight;
-        let chatBottomHeight = this.$refs.chatBottom.clientHeight;
-        const chatHeight = videoBoxHeight - chatTopHeight - chatBottomHeight - 45;
-        this.chatHeight = chatHeight;
-      }
-    }
-  }
+        handleSend(e: any) {
+            this.comments.push({ id: this.comments.length + 1, user: 'Dummy', comment: this.message });
+            setTimeout(() => {
+                this.scrollChatToBottom();
+            }, 300);
+        },
+        onPlay() {
+            this.resizeChatBox();
+        },
+        onCanplay() {
+            this.resizeChatBox();
+        },
+        onScroll() {
+            console.log("onScroll");
+        },
+        resizeChatBox(e: any) {
+            let videoBoxHeight = this.$refs.videoBox.clientHeight;
+            let chatTopHeight = this.$refs.chatTop.clientHeight;
+            let chatBottomHeight = this.$refs.chatBottom.clientHeight;
+            const chatHeight = videoBoxHeight - chatTopHeight - chatBottomHeight - 60;
+            this.chatHeight = chatHeight;
+        },
+        scrollChatToBottom() {
+            const chatBox = this.$refs.chatbox;
+            //chatBox.scrollTop = chatBox.scrollHeight; //use this code in case of not using perfect-scrollbar
+            chatBox.$el.scrollTop = chatBox.$el.scrollHeight;
+        },
+    },
+}
 </script>
