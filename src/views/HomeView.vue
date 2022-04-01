@@ -29,7 +29,7 @@
             class="chat-view-content"
             ref="chatbox"
             @ps-scroll-y="onScroll"
-            :style="{'max-height': `${chatBoxHeight}px`}"
+            :style="{'height': `${chatBoxHeight}px`}"
           >
             <div v-for="comment in comments" :key="comment.id">
               <CommentItem :id="comment.id" :avatar="comment.avatar" :user="comment.user" :msg="comment.comment"></CommentItem>
@@ -134,11 +134,14 @@
             console.log("onScroll");
         },
         resizeChatBox(e: any) {
-            let videoBoxHeight = this.$refs.videoBox.clientHeight;
-            let chatTopHeight = this.$refs.chatTop.clientHeight;
-            let chatBottomHeight = this.$refs.chatBottom.clientHeight;
-            const chatHeight = videoBoxHeight - chatTopHeight - chatBottomHeight - 60;
-            this.chatHeight = chatHeight;
+          if (!this.$refs.videoBox || !this.$refs.chatTop || !this.$refs.chatBottom) {
+            return;
+          }
+          let videoBoxHeight = this.$refs.videoBox.clientHeight;
+          let chatTopHeight = this.$refs.chatTop.clientHeight;
+          let chatBottomHeight = this.$refs.chatBottom.clientHeight;
+          const chatHeight = videoBoxHeight - chatTopHeight - chatBottomHeight - 60;
+          this.chatHeight = chatHeight;
         },
         scrollChatToBottom() {
             const chatBox = this.$refs.chatbox;
